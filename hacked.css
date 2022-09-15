@@ -2,11 +2,19 @@
   margin: 0;
   padding: 0;
 }
+body {
+  position: relative;
+}
 
 main,
 header,
 ul {
   padding: 1rem;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 ul {
@@ -15,12 +23,30 @@ ul {
   width: 300px;
 }
 
-.student-pop ul.show {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.student-pop {
+  display: none;
+}
+
+.student-pop.show {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgb(23, 67, 88, 0.5);
 }
 
 .student-pop ul {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: azure;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-height: 50%;
 }

@@ -82,7 +82,7 @@ function populateStudentPop() {
     console.log("displayStudent");
     const template = document.querySelector("#studentPop").content;
     const copy = template.cloneNode(true);
-    const popUp = copy.querySelector(".student-pop ul");
+    const popUp = copy.querySelector(".student-pop");
     copy.querySelector(".full-name").textContent = `${student.firstName} ${student.lastName}`;
     copy.querySelector(".first-name").textContent = `First Name: ${student.firstName}`;
     copy.querySelector(".last-name").textContent = `Last Name: ${student.lastName}`;
