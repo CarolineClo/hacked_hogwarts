@@ -5,8 +5,7 @@
 
 main,
 header,
-ul,
-h1 {
+ul {
   padding: 1rem;
 }
 
@@ -14,4 +13,14 @@ ul {
   list-style: none;
   border: black 1px solid;
   width: 300px;
+}
+
+.student-pop ul.show {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.student-pop ul {
+  display: none;
 }

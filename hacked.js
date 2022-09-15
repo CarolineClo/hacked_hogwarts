@@ -24,6 +24,7 @@ function start() {
   loadJSON();
 }
 
+//model
 function loadJSON() {
   fetch(url)
     .then((response) => response.json())
@@ -32,6 +33,7 @@ function loadJSON() {
     });
 }
 
+//controller
 function prepareObjects(jsonData) {
   jsonData.forEach((studentInfo) => {
     const student = Object.create(studentObj);
@@ -66,18 +68,22 @@ function prepareObjects(jsonData) {
     allStudents.unshift(student);
     console.log(allStudents);
   });
-  displayStudentPop();
+
+  populateStudentPop();
 }
 
 function capitalise(str) {
   return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 }
 
-function displayStudentPop() {
+// view
+function populateStudentPop() {
   allStudents.forEach((student) => {
     console.log("displayStudent");
     const template = document.querySelector("#studentPop").content;
     const copy = template.cloneNode(true);
+    const popUp = copy.querySelector(".student-pop ul");
+    copy.querySelector(".full-name").textContent = `${student.firstName} ${student.lastName}`;
     copy.querySelector(".first-name").textContent = `First Name: ${student.firstName}`;
     copy.querySelector(".last-name").textContent = `Last Name: ${student.lastName}`;
     copy.querySelector(".middle-name").textContent = `Middle Name: ${student.middleName}`;
@@ -86,7 +92,17 @@ function displayStudentPop() {
     copy.querySelector(".prefect").textContent = `Prefect Status: ${student.prefect}`;
     copy.querySelector(".expelled").textContent = `Student Expelled: ${student.expelled}`;
     copy.querySelector(".squad").textContent = `Student in Squad: ${student.inSquad}`;
+    copy.querySelector(".student-list").addEventListener("click", clickShowPop);
+
     const parent = document.querySelector("main");
     parent.appendChild(copy);
+
+    function clickShowPop() {
+      if (popUp.classList.contains("show")) {
+        popUp.classList.remove("show");
+      } else {
+        popUp.classList.add("show");
+      }
+    }
   });
 }
