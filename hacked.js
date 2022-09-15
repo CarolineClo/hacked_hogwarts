@@ -83,7 +83,11 @@ function populateStudentPop() {
     const template = document.querySelector("#studentPop").content;
     const copy = template.cloneNode(true);
     const popUp = copy.querySelector(".student-pop");
+
+    //the list of names
     copy.querySelector(".full-name").textContent = `${student.firstName} ${student.lastName}`;
+    copy.querySelector(".student-list").addEventListener("click", clickShowPop);
+    //the pop up
     copy.querySelector(".first-name").textContent = `First Name: ${student.firstName}`;
     copy.querySelector(".last-name").textContent = `Last Name: ${student.lastName}`;
     copy.querySelector(".middle-name").textContent = `Middle Name: ${student.middleName}`;
@@ -92,7 +96,7 @@ function populateStudentPop() {
     copy.querySelector(".prefect").textContent = `Prefect Status: ${student.prefect}`;
     copy.querySelector(".expelled").textContent = `Student Expelled: ${student.expelled}`;
     copy.querySelector(".squad").textContent = `Student in Squad: ${student.inSquad}`;
-    copy.querySelector(".student-list").addEventListener("click", clickShowPop);
+    copy.querySelector(".close").addEventListener("click", clickShowPop);
 
     const parent = document.querySelector("main");
     parent.appendChild(copy);

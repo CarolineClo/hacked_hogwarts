@@ -10,6 +10,7 @@ main,
 header,
 ul {
   padding: 1rem;
+  list-style: none;
 }
 
 main {
@@ -17,7 +18,7 @@ main {
   flex-wrap: wrap;
 }
 
-ul {
+.student-list ul {
   list-style: none;
   border: black 1px solid;
   width: 300px;
@@ -37,7 +38,7 @@ ul {
   background-color: rgb(23, 67, 88, 0.5);
 }
 
-.student-pop ul {
+.student-pop .message {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -49,4 +50,20 @@ ul {
   right: 0;
   margin: auto;
   max-height: 50%;
+  border: 1px solid black;
+  width: 300px;
+}
+
+.student-pop .message ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.student-pop .close {
+  position: absolute;
+  left: 85%;
+  top: 5%;
+  padding: 0.5rem;
 }
