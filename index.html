@@ -12,7 +12,11 @@
       <h1>Hogwarts Student Data</h1>
     </header>
     <main>
+      <div class="search-bar">
+        <input type="text" placeholder="Search.." />
+      </div>
       <section class="filter-buttons">
+        <p>Select Filter:</p>
         <button class="filter" data-action="filter" data-filter="enrolled">Enrolled Students</button>
         <button class="filter" data-action="filter" data-filter="expelled">Expelled Students</button>
         <button class="filter" data-action="filter" data-filter="slytherin">Slytherin</button>
@@ -20,13 +24,26 @@
         <button class="filter" data-action="filter" data-filter="ravenclaw">Ravenclaw</button>
         <button class="filter" data-action="filter" data-filter="gryffindor">Gryffindor</button>
       </section>
-      <div id="hogwartsData"></div>
+      <table id="list">
+        <thead>
+          <tr id="sorting">
+            <th class="prefect-check" data-action="sort" data-sort-direction="asc" data-sort="prefect">Prefect</th>
+            <th data-action="sort" data-sort-direction="asc" data-sort="first-name">First Name</th>
+            <th data-action="sort" data-sort-direction="asc" data-sort="last-name">Last Name</th>
+            <th data-action="sort" data-sort-direction="asc" data-sort="house">House</th>
+          </tr>
+        </thead>
+        <tbody id="hogwartsData"></tbody>
+      </table>
+
       <template id="studentPop">
-        <section class="student-list">
-          <ul>
-            <li class="full-name"></li>
-          </ul>
-        </section>
+        <tr class="student-list">
+          <td data-field="prefect"><input type="checkbox" id="prefectCheck" /></td>
+          <td data-field="first-name">First Name</td>
+          <td data-field="last-name">Last Name</td>
+          <td data-field="house">House</td>
+        </tr>
+
         <section class="student-pop">
           <div class="message">
             <button class="close">X</button>

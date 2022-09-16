@@ -2,8 +2,10 @@
   margin: 0;
   padding: 0;
 }
+
 body {
   position: relative;
+  padding: 2rem;
 }
 
 main,
@@ -13,6 +15,77 @@ ul {
   list-style: none;
 }
 
+.filter-buttons {
+  display: grid;
+  grid-template: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  width: 59%;
+}
+
+.filter-buttons p {
+  grid-column-start: span 4;
+}
+
+.filter-buttons [data-filter="enrolled"] {
+  grid-column-start: span 2;
+}
+
+.filter-buttons [data-filter="expelled"] {
+  grid-column-start: span 2;
+}
+
+.filter-buttons .enrolled-expelled button {
+  width: 100%;
+}
+
+.filter-buttons button {
+  padding: 0.5rem;
+  width: 100%;
+}
+
+#list {
+  width: 100%;
+  padding-top: 2rem;
+}
+
+#sorting th {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 0.5rem;
+  border-bottom: black solid 1px;
+  border-top: black solid 1px;
+  background-color: rgb(231, 225, 237, 100%);
+}
+
+#hogwartsData td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  border-bottom: black solid 0.5px;
+}
+
+#hogwartsData td:first-child {
+  text-align: center;
+}
+
+#hogwartsData tr.student-list:nth-of-type(even) {
+  background-color: rgb(228, 220, 234, 50%);
+}
+
+h1,
+p,
+li,
+button,
+th,
+td {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+span {
+  font-weight: 800;
+}
 /* #hogwartsData {
   display: flex;
   flex-wrap: wrap;
@@ -43,9 +116,9 @@ ul {
   flex-direction: column;
   gap: 0.5rem;
   background-color: azure;
-  position: absolute;
-  top: 0;
-  bottom: 0;
+  position: fixed;
+  top: 30%;
+
   left: 0;
   right: 0;
   margin: auto;

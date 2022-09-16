@@ -89,8 +89,12 @@ function populateStudentPop() {
     const popUp = copy.querySelector(".student-pop");
 
     //the list of names
-    copy.querySelector(".full-name").textContent = `${student.firstName} ${student.lastName}`;
-    copy.querySelector(".student-list").addEventListener("click", clickShowPop);
+    copy.querySelector("[data-field = prefect]").input = student.prefect;
+    copy.querySelector("[data-field = first-name]").textContent = student.firstName;
+    copy.querySelector("[data-field = last-name]").textContent = student.lastName;
+    copy.querySelector("[data-field = house]").textContent = student.house;
+    copy.querySelector("[data-field = first-name]").addEventListener("click", clickShowPop);
+    copy.querySelector("[data-field = last-name]").addEventListener("click", clickShowPop);
     //the pop up
     copy.querySelector(".first-name").textContent = student.firstName;
     copy.querySelector(".last-name").textContent = student.lastName;
