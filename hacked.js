@@ -25,6 +25,7 @@ function start() {
 }
 
 //model
+//fetching the data
 function loadJSON() {
   fetch(url)
     .then((response) => response.json())
@@ -34,6 +35,8 @@ function loadJSON() {
 }
 
 //controller
+//cleaning the data
+
 function prepareObjects(jsonData) {
   jsonData.forEach((studentInfo) => {
     const student = Object.create(studentObj);
@@ -77,6 +80,7 @@ function capitalise(str) {
 }
 
 // view
+//displaying the data
 function populateStudentPop() {
   allStudents.forEach((student) => {
     console.log("displayStudent");
@@ -88,17 +92,17 @@ function populateStudentPop() {
     copy.querySelector(".full-name").textContent = `${student.firstName} ${student.lastName}`;
     copy.querySelector(".student-list").addEventListener("click", clickShowPop);
     //the pop up
-    copy.querySelector(".first-name").textContent = `First Name: ${student.firstName}`;
-    copy.querySelector(".last-name").textContent = `Last Name: ${student.lastName}`;
-    copy.querySelector(".middle-name").textContent = `Middle Name: ${student.middleName}`;
-    copy.querySelector(".nick-name").textContent = `Nickname: ${student.nickName}`;
-    copy.querySelector(".house").textContent = `House: ${student.house}`;
-    copy.querySelector(".prefect").textContent = `Prefect Status: ${student.prefect}`;
-    copy.querySelector(".expelled").textContent = `Student Expelled: ${student.expelled}`;
-    copy.querySelector(".squad").textContent = `Student in Squad: ${student.inSquad}`;
+    copy.querySelector(".first-name").textContent = student.firstName;
+    copy.querySelector(".last-name").textContent = student.lastName;
+    copy.querySelector(".middle-name").textContent = student.middleName;
+    copy.querySelector(".nick-name").textContent = student.nickName;
+    copy.querySelector(".house").textContent = student.house;
+    copy.querySelector(".prefect").textContent = student.prefect;
+    copy.querySelector(".expelled").textContent = student.expelled;
+    copy.querySelector(".squad").textContent = student.inSquad;
     copy.querySelector(".close").addEventListener("click", clickShowPop);
 
-    const parent = document.querySelector("main");
+    const parent = document.querySelector("#hogwartsData");
     parent.appendChild(copy);
 
     function clickShowPop() {

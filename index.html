@@ -12,27 +12,35 @@
       <h1>Hogwarts Student Data</h1>
     </header>
     <main>
+      <section class="filter-buttons">
+        <button class="filter" data-action="filter" data-filter="enrolled">Enrolled Students</button>
+        <button class="filter" data-action="filter" data-filter="expelled">Expelled Students</button>
+        <button class="filter" data-action="filter" data-filter="slytherin">Slytherin</button>
+        <button class="filter" data-action="filter" data-filter="hufflepuff">Hufflepuff</button>
+        <button class="filter" data-action="filter" data-filter="ravenclaw">Ravenclaw</button>
+        <button class="filter" data-action="filter" data-filter="gryffindor">Gryffindor</button>
+      </section>
+      <div id="hogwartsData"></div>
       <template id="studentPop">
         <section class="student-list">
           <ul>
-            <li class="full-name">Student full Name</li>
+            <li class="full-name"></li>
           </ul>
         </section>
         <section class="student-pop">
           <div class="message">
             <button class="close">X</button>
-            <img class="portrait" src="" alt="student portrait" />
-
             <ul>
-              <li class="first-name">First Name:</li>
-              <li class="middle-name">Middle Name:</li>
-              <li class="nick-name">Nick Name:</li>
-              <li class="last-name">Last Name:</li>
-              <li class="house">House:</li>
-              <li class="blood-status">Blood-Status:</li>
-              <li class="prefect">Prefect Y/N</li>
-              <li class="expelled">Expelled Y/N</li>
-              <li class="squad">Inqusitional Squad Y/N</li>
+              <li>First Name: <span class="first-name"></span></li>
+              <li>Middle Name: <span class="middle-name"></span></li>
+              <li>Nick Name: <span class="nick-name"></span></li>
+              <li>Last Name: <span class="last-name"></span></li>
+              <li><img class="portrait" src="" alt="student portrait" /></li>
+              <li>House: <span class="house"></span></li>
+              <li>Blood-Status: <span class="blood-status"></span></li>
+              <li>Student Expelled: <span class="expelled"></span></li>
+              <li>Prefect-Status: <span class="prefect"></span></li>
+              <li>Student in Squad: <span class="squad"></span></li>
             </ul>
           </div>
         </section>
