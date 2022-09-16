@@ -2,9 +2,7 @@
 
 //all consts
 const url = "https://petlatkea.dk/2021/hogwarts/students.json";
-
 let allStudents = [];
-
 const studentObj = {
   firstName: "",
   middleName: "null",
@@ -21,11 +19,18 @@ const studentObj = {
 window.addEventListener("DOMContentLoaded", start);
 
 function start() {
+  registerButtons();
   loadJSON();
 }
 
 //model
-//fetching the data
+//adding event listeners
+
+function registerButtons() {
+  document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
+}
+
+//fetching and preparing the data
 
 function loadJSON() {
   fetch(url)
@@ -34,9 +39,6 @@ function loadJSON() {
       prepareObjects(jsonData);
     });
 }
-
-//controller
-//cleaning the data
 
 function prepareObjects(jsonData) {
   allStudents = jsonData.map(prepareStudent);
@@ -81,14 +83,48 @@ function capitalise(str) {
   return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 }
 
-function filterList() {
-  const filteredList = allStudents.filter(isGriff);
+//controler //creating filters
+
+function selectFilter(event) {
+  const filter = event.target.dataset.filter;
+  console.log(`user selected ${filter}`);
+  filterList(filter);
+}
+
+function filterList(house) {
+  let filteredList = allStudents;
+  if (house === "Gryffindor") {
+    filteredList = allStudents.filter(isGriff);
+  } else if (house === "Slytherin") {
+    filteredList = allStudents.filter(isSlyth);
+  } else if (house === "Hufflepuff") {
+    filteredList = allStudents.filter(isHuff);
+  } else if (house === "Ravenclaw") {
+    filteredList = allStudents.filter(isRave);
+  } else if (house === "expelled") {
+    filteredList = allStudents.filter(isExpelled);
+  }
   populateStudentPop(filteredList);
-  console.log(filteredList);
 }
 
 function isGriff(student) {
   return student.house === "Gryffindor";
+}
+
+function isSlyth(student) {
+  return student.house === "Slytherin";
+}
+
+function isHuff(student) {
+  return student.house === "Hufflepuff";
+}
+
+function isRave(student) {
+  return student.house === "Ravenclaw";
+}
+
+function isExpelled(student) {
+  return student.expelled === true;
 }
 
 // view
