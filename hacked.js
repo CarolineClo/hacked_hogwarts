@@ -26,6 +26,7 @@ function start() {
 
 //model
 //fetching the data
+
 function loadJSON() {
   fetch(url)
     .then((response) => response.json())
@@ -53,6 +54,8 @@ function prepareObjects(jsonData) {
     //find lastName and capitalise it
     student.lastName = fullname.substring(fullname.lastIndexOf(" ") + 1);
     student.lastName = capitalise(student.lastName);
+    //find first initial
+    student.initial = fullname.substring(0, 1).toLowerCase();
     //find nickName and capatalise
     if (fullname.includes(`"`)) {
       student.nickName = fullname.split(`"`)[1];
@@ -67,9 +70,8 @@ function prepareObjects(jsonData) {
     } else {
       student.middleName = "none";
     }
-    console.log(student);
+
     allStudents.unshift(student);
-    console.log(allStudents);
   });
 
   populateStudentPop();
@@ -81,6 +83,7 @@ function capitalise(str) {
 
 // view
 //displaying the data
+
 function populateStudentPop() {
   allStudents.forEach((student) => {
     console.log("displayStudent");
@@ -104,6 +107,7 @@ function populateStudentPop() {
     copy.querySelector(".prefect").textContent = student.prefect;
     copy.querySelector(".expelled").textContent = student.expelled;
     copy.querySelector(".squad").textContent = student.inSquad;
+    copy.querySelector(".portrait").src = `images/${student.lastName}_${student.initial}.png`;
     copy.querySelector(".close").addEventListener("click", clickShowPop);
 
     const parent = document.querySelector("#hogwartsData");
