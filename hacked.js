@@ -2,7 +2,15 @@
 
 //all consts
 const url = "https://petlatkea.dk/2021/hogwarts/students.json";
+
 let allStudents = [];
+
+const settings = {
+  filter: "enrolled",
+  sortBy: "firstName",
+  sortDir: "asc",
+};
+
 const studentObj = {
   firstName: "",
   middleName: "null",
@@ -90,23 +98,29 @@ function capitalise(str) {
 function selectFilter(event) {
   const filter = event.target.dataset.filter;
   console.log(`user selected ${filter}`);
-  filterList(filter);
+  //filterList(filter);
+  setFilter(filter);
 }
 
-function filterList(house) {
-  let filteredList = allStudents;
-  if (house === "Gryffindor") {
+function setFilter(filter) {
+  settings.filterBy = filter;
+  buildList();
+}
+
+function filterList(filteredList) {
+  //let filteredList = allStudents;
+  if (settings.filterBy === "Gryffindor") {
     filteredList = allStudents.filter(isGriff);
-  } else if (house === "Slytherin") {
+  } else if (settings.filterBy === "Slytherin") {
     filteredList = allStudents.filter(isSlyth);
-  } else if (house === "Hufflepuff") {
+  } else if (settings.filterBy === "Hufflepuff") {
     filteredList = allStudents.filter(isHuff);
-  } else if (house === "Ravenclaw") {
+  } else if (settings.filterBy === "Ravenclaw") {
     filteredList = allStudents.filter(isRave);
-  } else if (house === "expelled") {
+  } else if (settings.filterBy === "expelled") {
     filteredList = allStudents.filter(isExpelled);
   }
-  populateStudentPop(filteredList);
+  return filteredList;
 }
 
 function isGriff(student) {
@@ -140,29 +154,35 @@ function selectSort(event) {
   }
   console.log(`User selected ${sortBy} - ${sortDir}`);
   console.log(`user selected ${sortBy}`);
-  sortList(sortBy, sortDir);
+  setSort(sortBy, sortDir);
 }
 
-function sortList(sortBy, sortDir) {
-  let sortedList = allStudents;
+function setSort(sortBy, sortDir) {
+  settings.sortBy = sortBy;
+  settings.sortDir = sortDir;
+  buildList();
+}
+
+function sortList(sortedList) {
+  //let sortedList = allStudents;
   let direction = 1;
-  if (sortDir === "desc") {
+  if (settings.sortDir === "desc") {
     direction = -1;
   } else {
-    direction = 1;
+    settings.direction = 1;
   }
 
   sortedList = sortedList.sort(sortByChoice);
 
   function sortByChoice(studentA, studentB) {
-    if (studentA[sortBy] < studentB[sortBy]) {
+    if (studentA[settings.sortBy] < studentB[settings.sortBy]) {
       return -1 * direction;
     } else {
       return 1 * direction;
     }
   }
 
-  populateStudentPop(sortedList);
+  return sortedList;
 }
 
 // view
@@ -171,6 +191,13 @@ function sortList(sortBy, sortDir) {
 function populateStudentPop(allStudents) {
   document.querySelector("#hogwartsData").innerHTML = "";
   allStudents.forEach(displayAll);
+}
+
+function buildList() {
+  const currentList = filterList(allStudents);
+  const sortedList = sortList(currentList);
+  populateStudentPop(sortedList);
+  console.log(currentList);
 }
 
 function displayAll(student) {
