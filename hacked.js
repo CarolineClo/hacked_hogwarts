@@ -28,6 +28,8 @@ function start() {
 
 function registerButtons() {
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
+
+  document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
 }
 
 //fetching and preparing the data
@@ -125,6 +127,49 @@ function isRave(student) {
 
 function isExpelled(student) {
   return student.expelled === true;
+}
+
+function selectSort(event) {
+  const sortBy = event.target.dataset.sort;
+  console.log(`user selected ${sortBy}`);
+  sortList(sortBy);
+}
+
+function sortList(sortBy) {
+  let sortedList = allStudents;
+  if (sortBy === "firstName") {
+    sortedList = allStudents.sort(sortByFirstName);
+  } else if (sortBy === "lastName") {
+    sortedList = allStudents.sort(sortBylastName);
+  } else if (sortBy === "house") {
+    sortedList = allStudents.sort(sortByHouse);
+  }
+
+  populateStudentPop(sortedList);
+}
+
+function sortByFirstName(studentA, studentB) {
+  if (studentA.firstName < studentB.firstName) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+function sortBylastName(studentA, studentB) {
+  if (studentA.lastName < studentB.lastName) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+function sortByHouse(studentA, studentB) {
+  if (studentA.house < studentB.house) {
+    return -1;
+  } else {
+    return 1;
+  }
 }
 
 // view
