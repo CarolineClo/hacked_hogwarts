@@ -137,39 +137,18 @@ function selectSort(event) {
 
 function sortList(sortBy) {
   let sortedList = allStudents;
-  if (sortBy === "firstName") {
-    sortedList = allStudents.sort(sortByFirstName);
-  } else if (sortBy === "lastName") {
-    sortedList = allStudents.sort(sortBylastName);
-  } else if (sortBy === "house") {
-    sortedList = allStudents.sort(sortByHouse);
+
+  sortedList = sortedList.sort(sortByChoice);
+
+  function sortByChoice(studentA, studentB) {
+    if (studentA[sortBy] < studentB[sortBy]) {
+      return -1;
+    } else {
+      return 1;
+    }
   }
 
   populateStudentPop(sortedList);
-}
-
-function sortByFirstName(studentA, studentB) {
-  if (studentA.firstName < studentB.firstName) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function sortBylastName(studentA, studentB) {
-  if (studentA.lastName < studentB.lastName) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function sortByHouse(studentA, studentB) {
-  if (studentA.house < studentB.house) {
-    return -1;
-  } else {
-    return 1;
-  }
 }
 
 // view
