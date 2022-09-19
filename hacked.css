@@ -74,6 +74,10 @@ ul {
   background-color: rgb(228, 220, 234, 50%);
 }
 
+#hogwartsData tr.student-list:hover {
+  background-color: rgb(220, 200, 239, 91%);
+}
+
 h1,
 p,
 li,
@@ -139,4 +143,8 @@ span {
   left: 85%;
   top: 5%;
   padding: 0.5rem;
+}
+
+#sorting th.sortby {
+  text-decoration: underline;
 }

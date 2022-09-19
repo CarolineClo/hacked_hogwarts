@@ -147,6 +147,12 @@ function selectSort(event) {
   const sortBy = event.target.dataset.sort;
   const sortDir = event.target.dataset.sortDirection;
 
+  //find old sortBy element and remove sortby
+  const oldElement = document.querySelector(`[data-sort='${settings.sortBy}']`);
+  oldElement.classList.remove("sortby");
+  //indicate active sort
+  event.target.classList.add("sortby");
+
   if (sortDir === "asc") {
     event.target.dataset.sortDirection = "desc";
   } else {
@@ -210,8 +216,9 @@ function displayAll(student) {
   copy.querySelector("[data-field = first-name]").textContent = student.firstName;
   copy.querySelector("[data-field = last-name]").textContent = student.lastName;
   copy.querySelector("[data-field = house]").textContent = student.house;
-  copy.querySelector("[data-field = first-name]").addEventListener("click", clickShowPop);
-  copy.querySelector("[data-field = last-name]").addEventListener("click", clickShowPop);
+  copy.querySelector(".student-list").addEventListener("click", clickShowPop);
+  // copy.querySelector("[data-field = first-name]").addEventListener("click", clickShowPop);
+  // copy.querySelector("[data-field = last-name]").addEventListener("click", clickShowPop);
   //the pop up
   copy.querySelector(".first-name").textContent = student.firstName;
   copy.querySelector(".last-name").textContent = student.lastName;
