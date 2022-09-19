@@ -52,7 +52,7 @@ function loadJSON() {
 
 function prepareObjects(jsonData) {
   allStudents = jsonData.map(prepareStudent);
-  populateStudentPop(allStudents);
+  buildList();
 }
 
 function prepareStudent(studentInfo) {
@@ -79,7 +79,7 @@ function prepareStudent(studentInfo) {
   } else {
     student.nickName = "none";
   }
-
+  //get middlename and capatalise
   if (fullname.split(" ").length > 2 && fullname.includes(`"`) === false) {
     student.middleName = fullname.split(` `)[1];
     student.middleName = capitalise(student.middleName);
@@ -95,20 +95,21 @@ function capitalise(str) {
 
 //controler //creating filters
 
+//find the selected filter
 function selectFilter(event) {
   const filter = event.target.dataset.filter;
   console.log(`user selected ${filter}`);
-  //filterList(filter);
   setFilter(filter);
 }
 
+//add the filter
 function setFilter(filter) {
   settings.filterBy = filter;
   buildList();
 }
 
+//create the filtered list from selected filter
 function filterList(filteredList) {
-  //let filteredList = allStudents;
   if (settings.filterBy === "Gryffindor") {
     filteredList = allStudents.filter(isGriff);
   } else if (settings.filterBy === "Slytherin") {
@@ -191,6 +192,14 @@ function sortList(sortedList) {
   return sortedList;
 }
 
+//create the filtered/sorted list
+
+function buildList() {
+  const currentList = filterList(allStudents);
+  const sortedList = sortList(currentList);
+  populateStudentPop(sortedList);
+}
+
 // view
 //displaying the data
 
@@ -199,26 +208,20 @@ function populateStudentPop(allStudents) {
   allStudents.forEach(displayAll);
 }
 
-function buildList() {
-  const currentList = filterList(allStudents);
-  const sortedList = sortList(currentList);
-  populateStudentPop(sortedList);
-  console.log(currentList);
-}
-
 function displayAll(student) {
   const template = document.querySelector("#studentPop").content;
   const copy = template.cloneNode(true);
   const popUp = copy.querySelector(".student-pop");
 
   //the list of names
-  copy.querySelector("[data-field = prefect]").input = student.prefect;
+  //copy.querySelector("[data-field = prefect]").textContent = student.prefect;
   copy.querySelector("[data-field = first-name]").textContent = student.firstName;
   copy.querySelector("[data-field = last-name]").textContent = student.lastName;
   copy.querySelector("[data-field = house]").textContent = student.house;
-  copy.querySelector(".student-list").addEventListener("click", clickShowPop);
-  // copy.querySelector("[data-field = first-name]").addEventListener("click", clickShowPop);
-  // copy.querySelector("[data-field = last-name]").addEventListener("click", clickShowPop);
+  copy.querySelector("[data-field = first-name]").addEventListener("click", clickShowPop);
+  copy.querySelector("[data-field = last-name]").addEventListener("click", clickShowPop);
+  copy.querySelector("[data-field = house]").addEventListener("click", clickShowPop);
+
   //the pop up
   copy.querySelector(".first-name").textContent = student.firstName;
   copy.querySelector(".last-name").textContent = student.lastName;
@@ -231,9 +234,6 @@ function displayAll(student) {
   copy.querySelector(".portrait").src = `images/${student.lastName}_${student.initial}.png`;
   copy.querySelector(".close").addEventListener("click", clickShowPop);
 
-  const parent = document.querySelector("#hogwartsData");
-  parent.appendChild(copy);
-
   function clickShowPop() {
     if (popUp.classList.contains("show")) {
       popUp.classList.remove("show");
@@ -241,4 +241,33 @@ function displayAll(student) {
       popUp.classList.add("show");
     }
   }
+
+  if (student.prefect === true) {
+    copy.querySelector("[data-field = prefect]").textContent = "👑";
+  } else {
+    copy.querySelector("[data-field = prefect]").textContent = "⸬";
+  }
+
+  copy.querySelector("[data-field = prefect]").addEventListener("click", selectPrefect);
+
+  function selectPrefect() {
+    if (student.prefect === true) {
+      student.prefect = false;
+    } else {
+      student.prefect = true;
+    }
+    buildList();
+  }
+
+  // function selectPrefect() {
+  //   if (student.prefect === true) {
+  //     copy.querySelector("[data-field = prefect]").textContent = "👑";
+  //   } else {
+  //     copy.querySelector("[data-field = prefect]").textContent = "⃝";
+  //   }
+  //   buildList();
+  // }
+
+  const parent = document.querySelector("#hogwartsData");
+  parent.appendChild(copy);
 }

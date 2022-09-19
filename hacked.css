@@ -70,12 +70,25 @@ ul {
   text-align: center;
 }
 
+#hogwartsData td:first-child:hover {
+  cursor: pointer;
+}
+
+#hogwartsData #prefectCheck {
+  cursor: pointer;
+}
+
+#hogwartsData [data-field="prefect"]:hover {
+  background-color: rgb(235, 250, 183, 100%);
+}
+
 #hogwartsData tr.student-list:nth-of-type(even) {
   background-color: rgb(228, 220, 234, 50%);
 }
 
 #hogwartsData tr.student-list:hover {
   background-color: rgb(220, 200, 239, 91%);
+  cursor: pointer;
 }
 
 h1,
@@ -147,4 +160,11 @@ span {
 
 #sorting th.sortby {
   text-decoration: underline;
+}
+
+#sorting th.sortby[data-sort-direction="asc"]::after {
+  content: "↑";
+}
+#sorting th.sortby[data-sort-direction="desc"]::after {
+  content: "↓";
 }
