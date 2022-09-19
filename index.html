@@ -38,7 +38,7 @@
 
       <template id="studentPop">
         <tr class="student-list">
-          <td data-field="prefect">⊙</td>
+          <td data-field="prefect" data-prefect="false"></td>
           <td data-field="first-name">First Name</td>
           <td data-field="last-name">Last Name</td>
           <td data-field="house">House</td>
@@ -62,6 +62,16 @@
           </div>
         </section>
       </template>
+
+      <!--warning box-->
+
+      <div id="onlyTwoPrefects" class="warning">
+        <button class="close">X</button>
+        <h1>You cannot appoint more than two prefects in each house</h1>
+        <h2>Remove one, before you reward another with this glorious title</h2>
+        <p><button data-action="remove1" class="remove1">Remove</button><span class="student1">firstName lastName</span></p>
+        <p><button data-action="remove2" class="remove2">Remove</button><span class="student2">firstName lastName</span></p>
+      </div>
     </main>
     <script src="hacked.js"></script>
   </body>
