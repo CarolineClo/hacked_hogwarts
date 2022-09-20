@@ -214,7 +214,7 @@ function displayAll(student) {
   const popUp = copy.querySelector(".student-pop");
 
   //the list of names
-  //copy.querySelector("[data-field = prefect]").textContent = student.prefect;
+
   copy.querySelector("[data-field = first-name]").textContent = student.firstName;
   copy.querySelector("[data-field = last-name]").textContent = student.lastName;
   copy.querySelector("[data-field = house]").textContent = student.house;
@@ -242,32 +242,82 @@ function displayAll(student) {
     }
   }
 
+  //appoint prefect
+
   if (student.prefect === true) {
     copy.querySelector("[data-field = prefect]").textContent = "👑";
   } else {
     copy.querySelector("[data-field = prefect]").textContent = "⸬";
   }
 
+  copy.querySelector("[data-field = prefect]").dataset.prefect = student.prefect;
   copy.querySelector("[data-field = prefect]").addEventListener("click", selectPrefect);
 
   function selectPrefect() {
     if (student.prefect === true) {
       student.prefect = false;
     } else {
-      student.prefect = true;
+      attemptPrefect(student);
     }
     buildList();
   }
 
-  // function selectPrefect() {
-  //   if (student.prefect === true) {
-  //     copy.querySelector("[data-field = prefect]").textContent = "👑";
-  //   } else {
-  //     copy.querySelector("[data-field = prefect]").textContent = "⃝";
-  //   }
-  //   buildList();
-  // }
-
   const parent = document.querySelector("#hogwartsData");
   parent.appendChild(copy);
+}
+
+function attemptPrefect(selectedStudent) {
+  const prefects = allStudents.filter((student) => student.prefect);
+  const othersInHouse = prefects.filter((student) => student.house === selectedStudent.house);
+  console.log(othersInHouse);
+  const numberOfothers = othersInHouse.length;
+
+  if (numberOfothers >= 2) {
+    console.log(`there can only be two prefects in each house ${othersInHouse[0].firstName}`);
+    removeAorB(othersInHouse[0], othersInHouse[1]);
+  } else {
+    makePrefect(selectedStudent);
+  }
+
+  function removeAorB(prefectA, prefectB) {
+    //warning box asks to remove A or B
+    console.log(prefectA.firstName);
+    document.querySelector("#onlyTwoPrefects").classList.add("show");
+    document.querySelector("#onlyTwoPrefects button.close-button").addEventListener("click", closeWarning);
+    document.querySelector("#onlyTwoPrefects [data-action=remove1]").addEventListener("click", clickRemoveA);
+    document.querySelector("#onlyTwoPrefects [data-action=remove2]").addEventListener("click", clickRemoveB);
+    document.querySelector("#onlyTwoPrefects span.student1").innerHTML = `${prefectA.firstName} ${prefectA.lastName} as a ${prefectA.house} prefect`;
+    document.querySelector("#onlyTwoPrefects span.student2").innerHTML = `${prefectB.firstName} ${prefectB.lastName} as a ${prefectB.house} prefect`;
+
+    //ignore do nothing
+    function closeWarning() {
+      document.querySelector("#onlyTwoPrefects").classList.remove("show");
+      document.querySelector("#onlyTwoPrefects button.close-button").removeEventListener("click", closeWarning);
+      document.querySelector("#onlyTwoPrefects [data-action=remove1]").removeEventListener("click", clickRemoveA);
+      document.querySelector("#onlyTwoPrefects [data-action=remove2]").removeEventListener("click", clickRemoveB);
+    }
+
+    //if remove prefectA is clicked
+    function clickRemoveA() {
+      removePrefect(prefectA);
+      makePrefect(selectedStudent);
+      buildList();
+      closeWarning();
+    }
+
+    function clickRemoveB() {
+      removePrefect(prefectB);
+      makePrefect(selectedStudent);
+      buildList();
+      closeWarning();
+    }
+  }
+
+  function removePrefect(prefectStudent) {
+    prefectStudent.prefect = false;
+  }
+
+  function makePrefect(student) {
+    student.prefect = true;
+  }
 }
