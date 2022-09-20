@@ -24,9 +24,12 @@ const studentObj = {
   inSquad: false,
 };
 
+const searchInput = document.querySelector("[data-search]");
+
 window.addEventListener("DOMContentLoaded", start);
 
 function start() {
+  searchBar();
   registerButtons();
   loadJSON();
 }
@@ -36,7 +39,6 @@ function start() {
 
 function registerButtons() {
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
-
   document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
 }
 
@@ -93,7 +95,17 @@ function capitalise(str) {
   return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 }
 
-//controler //creating filters
+//controler //search function
+function searchBar() {
+  searchInput.addEventListener("input", (e) => {
+    const value = e.target.value;
+    allStudents.forEach((student) => {
+      const containsSearch = student.firstName.includes(value) || student.lastName.includes(value);
+    });
+    console.log(value);
+  });
+}
+//creating filters
 
 //find the selected filter
 function selectFilter(event) {

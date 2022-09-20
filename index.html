@@ -13,7 +13,8 @@
     </header>
     <main>
       <div class="search-bar">
-        <input type="text" placeholder="Search.." />
+        <label for="search">Search Students:</label>
+        <input type="search" id="search" data-search placeholder="Search.." />
       </div>
       <section class="filter-buttons">
         <p>Select Filter:</p>
@@ -46,6 +47,7 @@
 
         <section class="student-pop">
           <div class="message">
+            <h2 class="house"></h2>
             <button class="close">X</button>
             <ul>
               <li><img class="portrait" src="images/abbott_h.png" alt="student portrait" /></li>
@@ -53,7 +55,6 @@
               <li>Middle Name: <span class="middle-name"></span></li>
               <li>Nick Name: <span class="nick-name"></span></li>
               <li>Last Name: <span class="last-name"></span></li>
-              <li>House: <span class="house"></span></li>
               <li>Blood-Status: <span class="blood-status"></span></li>
               <li>Student Expelled: <span class="expelled"></span></li>
               <li>Prefect-Status: <span class="prefect"></span></li>
