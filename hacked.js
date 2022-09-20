@@ -9,6 +9,7 @@ const settings = {
   filter: "enrolled",
   sortBy: "firstName",
   sortDir: "asc",
+  search: "",
 };
 
 const studentObj = {
@@ -24,22 +25,25 @@ const studentObj = {
   inSquad: false,
 };
 
-const searchInput = document.querySelector("[data-search]");
-
 window.addEventListener("DOMContentLoaded", start);
 
 function start() {
-  searchBar();
   registerButtons();
   loadJSON();
+  searchBar();
 }
 
-//model
+////MODEL////
 //adding event listeners
 
 function registerButtons() {
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
+
   document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
+}
+
+function searchBar() {
+  document.querySelector("[data-search ]").addEventListener("input", selectSearch);
 }
 
 //fetching and preparing the data
@@ -95,18 +99,31 @@ function capitalise(str) {
   return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 }
 
-//controler //search function
-function searchBar() {
-  searchInput.addEventListener("input", (e) => {
-    const value = e.target.value;
-    allStudents.forEach((student) => {
-      const containsSearch = student.firstName.includes(value) || student.lastName.includes(value);
-    });
-    console.log(value);
-  });
-}
-//creating filters
+////controler///
 
+//searchbar
+//find search term
+function selectSearch(event) {
+  allStudents.forEach(setSearch);
+  const value = event.target.value.toLowerCase();
+  setSearch(value);
+}
+//add the seacrhed filter
+function setSearch(search) {
+  settings.search = search;
+  buildList();
+  // let searchedlist;
+  // searchedlist = student.firstName.toLowerCase().includes(value) && student.firstName.toLowerCase().includes(value);
+  // console.log(searchedlist);
+}
+
+//create searchedList from search value
+function searchList(searchedList) {
+  searchedList = searchedList.filter(isSearched);
+  return searchedList;
+}
+
+//creating filters
 //find the selected filter
 function selectFilter(event) {
   const filter = event.target.dataset.filter;
@@ -156,6 +173,10 @@ function isExpelled(student) {
   return student.expelled === true;
 }
 
+function isSearched(student) {
+  return student.firstName.toLowerCase().includes(settings.search) || student.lastName.toLowerCase().includes(settings.search);
+}
+
 function selectSort(event) {
   const sortBy = event.target.dataset.sort;
   const sortDir = event.target.dataset.sortDirection;
@@ -183,7 +204,6 @@ function setSort(sortBy, sortDir) {
 }
 
 function sortList(sortedList) {
-  //let sortedList = allStudents;
   let direction = 1;
   if (settings.sortDir === "desc") {
     direction = -1;
@@ -209,7 +229,8 @@ function sortList(sortedList) {
 function buildList() {
   const currentList = filterList(allStudents);
   const sortedList = sortList(currentList);
-  populateStudentPop(sortedList);
+  const searchedList = searchList(sortedList);
+  populateStudentPop(searchedList);
 }
 
 // view
