@@ -134,7 +134,7 @@ span {
   gap: 0.5rem;
   background-color: azure;
   position: fixed;
-  top: 30%;
+  top: 10%;
 
   left: 0;
   right: 0;
@@ -142,6 +142,15 @@ span {
 
   border: 1px solid black;
   width: 300px;
+}
+
+.student-pop .expelled-warning {
+  display: none;
+}
+
+.student-pop .expell-button {
+  margin: 0 1rem 1rem;
+  padding: 1rem;
 }
 
 .student-pop h2 {
@@ -194,7 +203,6 @@ span {
   background-color: azure;
   position: fixed;
   top: 30%;
-
   left: 0;
   right: 0;
   margin: auto;

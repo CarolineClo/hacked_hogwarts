@@ -4,7 +4,8 @@
 const url = "https://petlatkea.dk/2021/hogwarts/students.json";
 
 let allStudents = [];
-
+let lastNamearr = [];
+let duplicateLastNames;
 const settings = {
   filter: "enrolled",
   sortBy: "firstName",
@@ -46,6 +47,13 @@ function searchBar() {
   document.querySelector("[data-search ]").addEventListener("input", selectSearch);
 }
 
+function findDuplicates() {
+  lastNamearr = allStudents.map((a) => a.lastName);
+  //console.log(allStudents);
+  duplicateLastNames = lastNamearr.filter((lastName, i, aar) => aar.indexOf(lastName) === i && aar.lastIndexOf(lastName) !== i);
+  return duplicateLastNames;
+}
+
 //fetching and preparing the data
 
 function loadJSON() {
@@ -58,7 +66,22 @@ function loadJSON() {
 
 function prepareObjects(jsonData) {
   allStudents = jsonData.map(prepareStudent);
+  allStudents.forEach(populateImg);
+  console.log(findDuplicates());
   buildList();
+}
+
+function populateImg(student) {
+  if (student.lastName === findDuplicates()[0]) {
+    console.log(findDuplicates()[0] === student.lastName);
+    student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
+  } else if (student.firstName === student.lastName) {
+    student.imageName = "";
+  } else if (student.lastName.includes("-")) {
+    student.imageName = `${student.lastName.substring(student.lastName.indexOf("-") + 1).toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
+  } else {
+    student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
+  }
 }
 
 function prepareStudent(studentInfo) {
@@ -76,8 +99,6 @@ function prepareStudent(studentInfo) {
   //find lastName and capitalise it
   student.lastName = fullname.substring(fullname.lastIndexOf(" ") + 1);
   student.lastName = capitalise(student.lastName);
-  //find first initial
-  student.initial = fullname.substring(0, 1).toLowerCase();
   //find nickName and capatalise
   if (fullname.includes(`"`)) {
     student.nickName = fullname.split(`"`)[1];
@@ -264,14 +285,16 @@ function displayAll(student) {
   copy.querySelector(".prefect").textContent = student.prefect;
   copy.querySelector(".expelled").textContent = student.expelled;
   copy.querySelector(".squad").textContent = student.inSquad;
-  copy.querySelector(".portrait").src = `images/${student.lastName}_${student.initial}.png`;
+  copy.querySelector(".portrait").src = `images/${student.imageName}`;
   copy.querySelector(".close").addEventListener("click", clickShowPop);
 
   function clickShowPop() {
     if (popUp.classList.contains("show")) {
+      // copy.querySelector(".expell-button").remove("click", expellStudent());
       popUp.classList.remove("show");
     } else {
       popUp.classList.add("show");
+      // copy.querySelector(".expell-button").addEventListener("click", expellStudent());
     }
   }
 
