@@ -5,6 +5,7 @@ const url = "https://petlatkea.dk/2021/hogwarts/students.json";
 
 let allStudents = [];
 let lastNamearr = [];
+let slytherinArr = [];
 let duplicateLastNames;
 const settings = {
   filter: "enrolled",
@@ -49,7 +50,6 @@ function searchBar() {
 
 function findDuplicates() {
   lastNamearr = allStudents.map((a) => a.lastName);
-  //console.log(allStudents);
   duplicateLastNames = lastNamearr.filter((lastName, i, aar) => aar.indexOf(lastName) === i && aar.lastIndexOf(lastName) !== i);
   return duplicateLastNames;
 }
@@ -67,13 +67,13 @@ function loadJSON() {
 function prepareObjects(jsonData) {
   allStudents = jsonData.map(prepareStudent);
   allStudents.forEach(populateImg);
-  console.log(findDuplicates());
+
   buildList();
 }
 
 function populateImg(student) {
   if (student.lastName === findDuplicates()[0]) {
-    console.log(findDuplicates()[0] === student.lastName);
+    // console.log(findDuplicates()[0] === student.lastName);
     student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
   } else if (student.firstName === student.lastName) {
     student.imageName = "";
@@ -257,6 +257,7 @@ function buildList() {
   const sortedList = sortList(currentList);
   const searchedList = searchList(sortedList);
   populateStudentPop(searchedList);
+  allStudents.forEach(findArrays);
 }
 
 // view
@@ -393,4 +394,20 @@ function attemptPrefect(selectedStudent) {
   function makePrefect(student) {
     student.prefect = true;
   }
+}
+
+function findArrays() {
+  let gryffinArr = allStudents.filter(isGriff);
+  slytherinArr = allStudents.filter(isSlyth);
+  let ravenArr = allStudents.filter(isRave);
+  let huffArr = allStudents.filter(isHuff);
+  let expellArr = allStudents.filter(isExpelled);
+  let enrolArr = allStudents.filter(isEnrolled);
+  document.querySelector(".enroll-students").innerHTML = `Enrolled Students: ${enrolArr.length}`;
+  document.querySelector(".expell-students").innerHTML = `Expelled Students: ${expellArr.length}`;
+  document.querySelector(".huff-students").innerHTML = `Hufflepuff Students: ${huffArr.length}`;
+  document.querySelector(".rave-students").innerHTML = `Ravenclaw Students: ${ravenArr.length}`;
+  document.querySelector(".gryff-students").innerHTML = `Gryffindor Students: ${gryffinArr.length}`;
+  document.querySelector(".slyth-students").innerHTML = `Slytherin Students: ${slytherinArr.length}`;
+  document.querySelector(".all-students").innerHTML = `Total Students: ${allStudents.length}`;
 }
