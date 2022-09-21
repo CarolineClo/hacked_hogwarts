@@ -21,16 +21,37 @@ ul {
   width: 300px;
 }
 
+#infoWrapper {
+  flex-wrap: wrap;
+  display: flex;
+  gap: 1rem;
+  align-content: baseline;
+  justify-content: space-between;
+}
+
+#about {
+  padding: 0;
+  border: 0.5px solid rgb(133, 133, 133);
+  padding: 1rem;
+}
+
 .filter-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
   margin-top: 1.5rem;
-  max-width: 59%;
+  width: 50%;
 }
 
 .filter-buttons p {
   grid-column-start: span 4;
+}
+
+.students-filters {
+  grid-column-start: span 4;
+  grid-column-start: span 4;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .filter-buttons [data-filter="enrolled"] {
@@ -99,8 +120,14 @@ ul {
   cursor: pointer;
 }
 
+#hogwartsData tr.student-list.expelled-student {
+  background-color: rgb(239, 59, 15, 70%);
+  text-decoration: line-through;
+}
+
 h1,
 h2,
+h3,
 p,
 li,
 button,
@@ -148,9 +175,17 @@ span {
   display: none;
 }
 
+.expelled-warning.show {
+  display: inline;
+}
+
 .student-pop .expell-button {
   margin: 0 1rem 1rem;
   padding: 1rem;
+}
+
+.hide {
+  display: none;
 }
 
 .student-pop h2 {

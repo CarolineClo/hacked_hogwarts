@@ -16,15 +16,32 @@
         <label for="search">Search Students:</label>
         <input type="search" id="search" data-search placeholder="Search.." />
       </div>
-      <section class="filter-buttons">
-        <p>Select Filter:</p>
-        <button class="filter" data-action="filter" data-filter="enrolled">Enrolled Students</button>
-        <button class="filter" data-action="filter" data-filter="expelled">Expelled Students</button>
-        <button class="filter" data-action="filter" data-filter="Slytherin">Slytherin</button>
-        <button class="filter" data-action="filter" data-filter="Hufflepuff">Hufflepuff</button>
-        <button class="filter" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
-        <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
-      </section>
+      <div id="infoWrapper">
+        <section class="filter-buttons">
+          <p>Select Filter:</p>
+          <div class="students-filters">
+            <button class="filter" data-action="filter" data-filter="all">All Students</button>
+            <button class="filter" data-action="filter" data-filter="enrolled">Enrolled Students</button>
+            <button class="filter" data-action="filter" data-filter="expelled">Expelled Students</button>
+          </div>
+          <button class="filter" data-action="filter" data-filter="Slytherin">Slytherin</button>
+          <button class="filter" data-action="filter" data-filter="Hufflepuff">Hufflepuff</button>
+          <button class="filter" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
+          <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
+        </section>
+        <section id="about">
+          <h3>List details:</h3>
+          <ul>
+            <li>Slytherin Students: 5</li>
+            <li>Hufflepuff: 3</li>
+            <li>Ravenclaw: 6</li>
+            <li>Gryffindor: 6</li>
+            <li>Enrolled Students: 31</li>
+            <li>Expelled Students: 3</li>
+            <li>Total Students: 34</li>
+          </ul>
+        </section>
+      </div>
       <table id="list">
         <thead>
           <tr id="sorting">

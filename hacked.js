@@ -133,9 +133,6 @@ function selectSearch(event) {
 function setSearch(search) {
   settings.search = search;
   buildList();
-  // let searchedlist;
-  // searchedlist = student.firstName.toLowerCase().includes(value) && student.firstName.toLowerCase().includes(value);
-  // console.log(searchedlist);
 }
 
 //create searchedList from search value
@@ -170,6 +167,10 @@ function filterList(filteredList) {
     filteredList = allStudents.filter(isRave);
   } else if (settings.filterBy === "expelled") {
     filteredList = allStudents.filter(isExpelled);
+  } else if (settings.filterBy === "enrolled") {
+    filteredList = allStudents.filter(isEnrolled);
+  } else if (settings.filterBy === "all") {
+    filteredList = allStudents;
   }
   return filteredList;
 }
@@ -192,6 +193,10 @@ function isRave(student) {
 
 function isExpelled(student) {
   return student.expelled === true;
+}
+
+function isEnrolled(student) {
+  return student.expelled === false;
 }
 
 function isSearched(student) {
@@ -266,6 +271,8 @@ function displayAll(student) {
   const template = document.querySelector("#studentPop").content;
   const copy = template.cloneNode(true);
   const popUp = copy.querySelector(".student-pop");
+  const expelledWarning = copy.querySelector(".expelled-warning");
+  const expellbutton = copy.querySelector(".expell-button");
 
   //the list of names
 
@@ -287,15 +294,25 @@ function displayAll(student) {
   copy.querySelector(".squad").textContent = student.inSquad;
   copy.querySelector(".portrait").src = `images/${student.imageName}`;
   copy.querySelector(".close").addEventListener("click", clickShowPop);
+  if (student.expelled === true) {
+    expelledWarning.classList.add("show");
+    expellbutton.classList.add("hide");
+    copy.querySelector("tr.student-list").classList.add("expelled-student");
+  }
 
   function clickShowPop() {
     if (popUp.classList.contains("show")) {
-      // copy.querySelector(".expell-button").remove("click", expellStudent());
       popUp.classList.remove("show");
     } else {
+      expellbutton.addEventListener("click", expellStudent);
       popUp.classList.add("show");
-      // copy.querySelector(".expell-button").addEventListener("click", expellStudent());
     }
+  }
+
+  function expellStudent() {
+    student.expelled = true;
+    popUp.classList.remove("show");
+    buildList();
   }
 
   //appoint prefect
