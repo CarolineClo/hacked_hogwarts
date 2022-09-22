@@ -1,5 +1,7 @@
 "use strict";
 
+window.addEventListener("DOMContentLoaded", start);
+
 //all consts
 const url = "https://petlatkea.dk/2021/hogwarts/students.json";
 
@@ -7,6 +9,11 @@ let allStudents = [];
 let lastNamearr = [];
 let slytherinArr = [];
 let duplicateLastNames;
+let isHPressed = false;
+let isAPressed = false;
+let isCPressed = false;
+let isKPressed = false;
+
 const settings = {
   filter: "enrolled",
   sortBy: "firstName",
@@ -25,28 +32,46 @@ const studentObj = {
   prefect: false,
   expelled: false,
   inSquad: false,
+  hacker: false,
 };
 
-window.addEventListener("DOMContentLoaded", start);
+const hacker = {
+  firstName: "Caroline",
+  middleName: "",
+  nickName: "",
+  lastName: "Cloughley",
+  Photo: "",
+  house: "Ravenclaw",
+  bloodStatus: "pure-blood",
+  prefect: false,
+  expelled: false,
+  inSquad: false,
+  hacker: true,
+};
 
 function start() {
-  registerButtons();
+  addListeners();
   loadJSON();
-  searchBar();
 }
 
 ////MODEL////
-//adding event listeners
 
-function registerButtons() {
+//add event listeners//
+
+function addListeners() {
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
-
   document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
+  document.querySelector("[data-search ]").addEventListener("input", selectSearch);
+  document.addEventListener("keyup", inputHack);
 }
 
-function searchBar() {
-  document.querySelector("[data-search ]").addEventListener("input", selectSearch);
-}
+// function searchBar() {
+//   document.querySelector("[data-search ]").addEventListener("input", selectSearch);
+// }
+
+// function attemptHack() {
+//   document.addEventListener("keyup", inputHack);
+// }
 
 function findDuplicates() {
   lastNamearr = allStudents.map((a) => a.lastName);
@@ -67,7 +92,6 @@ function loadJSON() {
 function prepareObjects(jsonData) {
   allStudents = jsonData.map(prepareStudent);
   allStudents.forEach(populateImg);
-
   buildList();
 }
 
@@ -120,12 +144,14 @@ function capitalise(str) {
   return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 }
 
-////controler///
+function createHacker() {}
+
+////controller///
 
 //searchbar
 //find search term
 function selectSearch(event) {
-  allStudents.forEach(setSearch);
+  // allStudents.forEach(setSearch);
   const value = event.target.value.toLowerCase();
   setSearch(value);
 }
@@ -410,4 +436,46 @@ function findArrays() {
   document.querySelector(".gryff-students").innerHTML = `Gryffindor Students: ${gryffinArr.length}`;
   document.querySelector(".slyth-students").innerHTML = `Slytherin Students: ${slytherinArr.length}`;
   document.querySelector(".all-students").innerHTML = `Total Students: ${allStudents.length}`;
+}
+
+////HACKING////
+
+function inputHack(event) {
+  let x = event.key;
+
+  if (x === "h") {
+    isHPressed = true;
+    console.log(`is h  pressed ?`, isHPressed);
+  }
+  if (x === "a") {
+    isAPressed = true;
+    console.log(`is a  pressed ?`, isAPressed);
+  }
+
+  if (x === "c") {
+    isCPressed = true;
+    console.log(`is c  pressed ?`, isCPressed);
+  }
+
+  if (x === "k") {
+    isKPressed = true;
+    console.log(`is k  pressed ?`, isKPressed);
+  }
+  hack();
+}
+
+function hack() {
+  if (isHPressed === true && isAPressed === true && isCPressed === true && isKPressed === true) {
+    hacked();
+  } else {
+    console.log("not hacked");
+  }
+}
+
+function hacked() {
+  document.removeEventListener("keyup", inputHack);
+  console.log("system is hacked");
+  allStudents.push(hacker);
+  document.querySelector("body").classList.add("hacked");
+  buildList();
 }

@@ -245,3 +245,9 @@ span {
   border: 1px solid black;
   width: 500px;
 }
+
+/*YOU'VE BEEN HACKED*/
+
+body.hacked {
+  background-color: deeppink;
+}

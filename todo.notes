@@ -1,0 +1,6 @@
+create expell button
+add eventlistener to expell button 
+expell student: 
+---student.expelled = true, 
+---remove event listener, 
+---hide button, unhide expelled  
