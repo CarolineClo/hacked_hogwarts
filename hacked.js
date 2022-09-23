@@ -8,9 +8,10 @@ const bloodURL = "https://petlatkea.dk/2021/hogwarts/families.json";
 
 let halfArr = [];
 let pureArr = [];
-let bloodArrays;
+
 let allStudents = [];
 let lastNamearr = [];
+let expelledArr = [];
 let duplicateLastNames;
 let isHPressed = false;
 let isAPressed = false;
@@ -225,7 +226,8 @@ function filterList(filteredList) {
   } else if (settings.filterBy === "Ravenclaw") {
     filteredList = allStudents.filter(isRave);
   } else if (settings.filterBy === "expelled") {
-    filteredList = allStudents.filter(isExpelled);
+    filteredList = expelledArr;
+    //filteredList = allStudents.filter(isExpelled);
   } else if (settings.filterBy === "enrolled") {
     filteredList = allStudents.filter(isEnrolled);
   } else if (settings.filterBy === "all") {
@@ -375,6 +377,21 @@ function displayAll(student) {
 
   function expellStudent() {
     student.expelled = true;
+    expelledArr.push(student);
+    console.log("expelled array", expelledArr);
+    const index = allStudents.findIndex((element) => {
+      if (element.firstName === student.firstName) {
+        return true;
+      }
+      return false;
+    });
+    console.log("index", index);
+
+    const splicedArray = allStudents.splice(index, 1);
+    console.log("splicedarray", splicedArray);
+    const expelledStudent = splicedArray[0];
+    console.log("expelled student", expelledStudent);
+
     popUp.classList.remove("show");
     buildList();
   }
@@ -500,7 +517,7 @@ function findArrays() {
   let slytherinArr = allStudents.filter(isSlyth);
   let ravenArr = allStudents.filter(isRave);
   let huffArr = allStudents.filter(isHuff);
-  let expellArr = allStudents.filter(isExpelled);
+  let expellArr = expelledArr;
   let enrolArr = allStudents.filter(isEnrolled);
   document.querySelector(".enroll-students").innerHTML = `Enrolled Students: ${enrolArr.length}`;
   document.querySelector(".expell-students").innerHTML = `Expelled Students: ${expellArr.length}`;
