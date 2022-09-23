@@ -180,8 +180,12 @@ span {
 }
 
 .student-pop .expell-button {
-  margin: 0 1rem 1rem;
+  margin: 0 1rem 0.5rem;
   padding: 1rem;
+}
+
+.student-pop .inquisitor-button {
+  margin: 0 1rem;
 }
 
 .hide {

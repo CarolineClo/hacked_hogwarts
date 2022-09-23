@@ -4,15 +4,20 @@ window.addEventListener("DOMContentLoaded", start);
 
 //all consts
 const url = "https://petlatkea.dk/2021/hogwarts/students.json";
+const bloodURL = "https://petlatkea.dk/2021/hogwarts/families.json";
 
+let halfArr = [];
+let pureArr = [];
+let bloodArrays;
 let allStudents = [];
 let lastNamearr = [];
-let slytherinArr = [];
 let duplicateLastNames;
 let isHPressed = false;
 let isAPressed = false;
 let isCPressed = false;
 let isKPressed = false;
+let jsonData;
+let bloodJSON;
 
 const settings = {
   filter: "enrolled",
@@ -49,9 +54,11 @@ const hacker = {
   hacker: true,
 };
 
-function start() {
+async function start() {
   addListeners();
-  loadJSON();
+  await loadJSON();
+  await loadBloodJSON();
+  prepareObjects();
 }
 
 ////MODEL////
@@ -81,18 +88,46 @@ function findDuplicates() {
 
 //fetching and preparing the data
 
-function loadJSON() {
-  fetch(url)
-    .then((response) => response.json())
-    .then((jsonData) => {
-      prepareObjects(jsonData);
-    });
+async function loadJSON() {
+  const resp = await fetch(url);
+  const data = await resp.json();
+  jsonData = data;
 }
 
-function prepareObjects(jsonData) {
+// function loadJSON() {
+//   fetch(url)
+//     .then((response) => response.json())
+//     .then((jsonData) => {
+//       prepareObjects(jsonData);
+//     });
+// }
+
+async function loadBloodJSON() {
+  const resp = await fetch(bloodURL);
+  const data = await resp.json();
+  bloodJSON = data;
+}
+
+async function prepareObjects() {
   allStudents = jsonData.map(prepareStudent);
   allStudents.forEach(populateImg);
+  allStudents.forEach(findBlood);
+  halfArr = bloodJSON.half;
+  pureArr = bloodJSON.pure;
+
   buildList();
+}
+
+function findBlood(student) {
+  halfArr = bloodJSON.half;
+  pureArr = bloodJSON.pure;
+  if (pureArr.includes(student.lastName) && halfArr.includes(student.lastName)) {
+    student.bloodStatus = "Half Blood";
+  } else if (pureArr.includes(student.lastName)) {
+    student.bloodStatus = "Pure Blood";
+  } else {
+    student.bloodStatus = "Half Blood";
+  }
 }
 
 function populateImg(student) {
@@ -143,8 +178,6 @@ function prepareStudent(studentInfo) {
 function capitalise(str) {
   return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 }
-
-function createHacker() {}
 
 ////controller///
 
@@ -300,6 +333,7 @@ function displayAll(student) {
   const popUp = copy.querySelector(".student-pop");
   const expelledWarning = copy.querySelector(".expelled-warning");
   const expellbutton = copy.querySelector(".expell-button");
+  const inquisitorButton = copy.querySelector(".inquisitor-button");
 
   //the list of names
 
@@ -317,6 +351,7 @@ function displayAll(student) {
   copy.querySelector(".nick-name").textContent = student.nickName;
   copy.querySelector(".house").textContent = student.house;
   copy.querySelector(".prefect").textContent = student.prefect;
+  copy.querySelector(".blood-status").textContent = student.bloodStatus;
   copy.querySelector(".expelled").textContent = student.expelled;
   copy.querySelector(".squad").textContent = student.inSquad;
   copy.querySelector(".portrait").src = `images/${student.imageName}`;
@@ -324,6 +359,7 @@ function displayAll(student) {
   if (student.expelled === true) {
     expelledWarning.classList.add("show");
     expellbutton.classList.add("hide");
+    inquisitorButton.classList.add("hide");
     copy.querySelector("tr.student-list").classList.add("expelled-student");
   }
 
@@ -332,6 +368,7 @@ function displayAll(student) {
       popUp.classList.remove("show");
     } else {
       expellbutton.addEventListener("click", expellStudent);
+      inquisitorButton.addEventListener("click", selectInquisitor);
       popUp.classList.add("show");
     }
   }
@@ -340,6 +377,42 @@ function displayAll(student) {
     student.expelled = true;
     popUp.classList.remove("show");
     buildList();
+  }
+
+  //appoint inquisitors//
+
+  function selectInquisitor() {
+    if (student.inSquad === true) {
+      student.inSquad = false;
+    } else {
+      attemptInquisitor(student);
+    }
+  }
+
+  function attemptInquisitor() {
+    if (student.bloodStatus === "Pure Blood") {
+      student.inSquad = true;
+      document.querySelector("#added").classList.add("show");
+      document.querySelector("#added button.close-button").addEventListener("click", closeWarning);
+      buildList();
+    }
+
+    if (student.house === "Slytherin") {
+      student.inSquad = true;
+      document.querySelector("#added").classList.add("show");
+      document.querySelector("#added button.close-button").addEventListener("click", closeWarning);
+      buildList();
+    } else {
+      document.querySelector("#notPure").classList.add("show");
+      document.querySelector("#notPure button.close-button").addEventListener("click", closeWarning);
+    }
+
+    function closeWarning() {
+      document.querySelector("#notPure").classList.remove("show");
+      document.querySelector("#notPure button.close-button").removeEventListener("click", closeWarning);
+      document.querySelector("#added").classList.remove("show");
+      document.querySelector("#added button.close-button").removeEventListener("click", closeWarning);
+    }
   }
 
   //appoint prefect
@@ -424,7 +497,7 @@ function attemptPrefect(selectedStudent) {
 
 function findArrays() {
   let gryffinArr = allStudents.filter(isGriff);
-  slytherinArr = allStudents.filter(isSlyth);
+  let slytherinArr = allStudents.filter(isSlyth);
   let ravenArr = allStudents.filter(isRave);
   let huffArr = allStudents.filter(isHuff);
   let expellArr = allStudents.filter(isExpelled);
