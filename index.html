@@ -9,28 +9,31 @@
   </head>
   <body>
     <header>
-      <h1>Hogwarts Student Data</h1>
+      <h1>Hogwarts</h1>
+      <h2>Student Data List</h2>
     </header>
     <main>
       <div class="search-bar">
-        <label for="search">Search Students:</label>
+        <label for="search"><h3>Search Students:</h3></label>
         <input type="search" id="search" data-search placeholder="Search.." />
       </div>
       <div id="infoWrapper">
         <section class="filter-buttons">
-          <p>Select Filter:</p>
+          <h3>Select Filter:</h3>
           <div class="students-filters">
             <button class="filter" data-action="filter" data-filter="all">Enrolled Students</button>
 
             <button class="filter" data-action="filter" data-filter="expelled">Expelled Students</button>
           </div>
-          <button class="filter" data-action="filter" data-filter="Slytherin">Slytherin</button>
-          <button class="filter" data-action="filter" data-filter="Hufflepuff">Hufflepuff</button>
-          <button class="filter" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
-          <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
+          <div class="houses-filters">
+            <button class="filter" data-action="filter" data-filter="Slytherin">Slytherin</button>
+            <button class="filter" data-action="filter" data-filter="Hufflepuff">Hufflepuff</button>
+            <button class="filter" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
+            <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
+          </div>
         </section>
         <section id="about">
-          <h3>List details:</h3>
+          <h4>List details:</h3>
           <ul>
             <li class="slyth-students">Slytherin Students: 5</li>
             <li class="huff-students">Hufflepuff: 3</li>
@@ -103,10 +106,24 @@
           <h2>They may not join the Inquisitor Squad</h2>
         </div>
       </section>
+      <section id="cannotExpell" class="warning">
+        <div class="message">
+          <button class="close-button">X</button>
+          <h1>I am the HACKER</h1>
+          <h2>You cannot expell me.</h2>
+        </div>
+      </section>
       <section id="added" class="warning">
         <div class="message">
           <button class="close-button">X</button>
           <h1>Student added to Inquisitor Squad</h1>
+        </div>
+      </section>
+      <section id="squadHacked" class="warning">
+        <div class="message">
+          <button class="close-button">X</button>
+          <h1><span class="squad-member">member</span> is no longer a member of the Inquisitor Squad</h1>
+          <h2>You have been HACKED!</h2>
         </div>
       </section>
     </main>

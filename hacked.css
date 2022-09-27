@@ -1,29 +1,102 @@
+@import url("https://use.typekit.net/wkb3apy.css");
+
 * {
   margin: 0;
   padding: 0;
 }
 
-body {
-  position: relative;
-  padding: 2rem;
+:root {
+  --font-header: english, sans-serif;
+  font-weight: 400;
+
+  --font-subhead: tiller, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  --light-colour: rgb(255, 249, 230, 100%);
+  --outside-shadow: 0px 4px 8px 2px rgb(0 0 0 / 16%);
+  --inside-shadow: inset 0px 2px 6px 2px rgb(0 0 0 / 16%);
+  --light-text-clour: #e6e1e1;
+  --dark-text-colour: rgb(3, 29, 44, 100%);
 }
 
-main,
-header,
+body {
+  position: relative;
+  padding: 1.5rem;
+  background-image: url("images/paper2.png"), linear-gradient(rgb(284, 244, 233, 100%), rgb(224, 215, 189, 100%));
+}
+
+main {
+  padding: 4rem 1rem;
+}
+
 ul {
   padding: 1rem;
   list-style: none;
 }
 
+h1 {
+  font-family: var(--font-header);
+  text-decoration: underline;
+  text-transform: uppercase;
+  font-size: 4rem;
+  color: var(--dark-text-colour);
+}
+
+h2 {
+  font-family: var(--font-subhead);
+  text-decoration: none;
+  text-transform: capitalize;
+  font-weight: 400;
+  font-size: 2rem;
+  color: var(--dark-text-colour);
+}
+
+h3 {
+  font-family: var(--font-subhead);
+  font-size: 1rem;
+  font-weight: 100;
+  color: var(--dark-text-colour);
+}
+
+h4 {
+  font-family: var(--font-header);
+  font-size: 1.5rem;
+  color: var(--dark-text-colour);
+}
+
+li {
+  font-family: var(--font-subhead);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--dark-text-colour);
+}
+
+header {
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: start;
+  gap: 2rem;
+  background-color: var(--light-colour);
+  box-shadow: var(--outside-shadow);
+}
 .search-bar {
   display: flex;
   flex-direction: column;
   width: 300px;
 }
 
+.search-bar input {
+  background-color: var(--light-colour);
+  box-shadow: var(--inside-shadow);
+  border: 0;
+  height: 2rem;
+}
+
 #infoWrapper {
-  flex-wrap: wrap;
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   align-content: baseline;
   justify-content: space-between;
@@ -31,27 +104,43 @@ ul {
 
 #about {
   padding: 0;
-  border: 0.5px solid rgb(133, 133, 133);
   padding: 1rem;
+  background-color: var(--light-colour);
+  box-shadow: var(--inside-shadow);
 }
 
 .filter-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
-  margin-top: 1.5rem;
-  width: 50%;
+  width: 68%;
 }
 
-.filter-buttons p {
+.filter-buttons h3 {
   grid-column-start: span 4;
+  align-self: end;
 }
 
 .students-filters {
-  grid-column-start: span 4;
-  grid-column-start: span 4;
+  grid-column-start: span 2;
   display: flex;
   gap: 0.5rem;
+}
+
+.houses-filters {
+  display: flex;
+  column-span: 4;
+  grid-column-start: span 4;
+  gap: 0.5rem;
+}
+
+.houses-filters button {
+  font-size: 1rem;
+}
+
+.students-filters button {
+  text-transform: uppercase;
+  font-size: 1.3rem;
 }
 
 .filter-buttons [data-filter="enrolled"] {
@@ -62,13 +151,28 @@ ul {
   grid-column-start: span 2;
 }
 
-.filter-buttons .enrolled-expelled button {
-  width: 100%;
-}
-
 .filter-buttons button {
   padding: 0.5rem;
   width: 100%;
+  background-color: #fff9e6;
+  border: 0;
+  border-radius: 5px;
+  font-family: var(--font-header);
+  box-shadow: var(--outside-shadow);
+}
+
+.filter-buttons button:hover {
+  transform: scale(102%);
+}
+
+.filter-buttons button:active {
+  background-color: #0f314b;
+  color: var(--light-text-clour);
+}
+
+.filter-buttons button:focus {
+  background-color: #0f314b;
+  color: var(--light-text-clour);
 }
 
 #list {
@@ -83,7 +187,8 @@ ul {
   padding-left: 0.5rem;
   border-bottom: black solid 1px;
   border-top: black solid 1px;
-  background-color: rgb(231, 225, 237, 100%);
+  /* background-color: rgb(231, 225, 237, 100%); */
+  background-image: linear-gradient(rgb(20, 92, 136, 91%), rgb(15, 49, 75, 100%));
 }
 
 /*names list*/
@@ -97,6 +202,7 @@ ul {
 /*prefect list*/
 #hogwartsData td:first-child {
   text-align: center;
+  font-size: 1.5rem;
 }
 
 #hogwartsData td:first-child:hover {
@@ -122,19 +228,20 @@ ul {
 
 #hogwartsData tr.student-list.expelled-student {
   background-color: rgb(239, 59, 15, 70%);
-  text-decoration: line-through;
 }
 
-h1,
-h2,
-h3,
 p,
 li,
-button,
-label,
-th,
 td {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: var(--font-subhead);
+}
+
+th {
+  font-family: var(--font-header);
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--light-text-clour);
+  font-size: 1rem;
 }
 
 span {
@@ -205,9 +312,20 @@ span {
 
 .student-pop .close {
   position: absolute;
-  left: 85%;
+  left: 82%;
+  top: 2%;
+  padding: 1rem;
+}
+
+#onlyTwoPrefects .close-button {
+  position: absolute;
+  left: 89%;
   top: 5%;
-  padding: 0.5rem;
+  padding: 1.5rem;
+}
+
+.message h1 {
+  text-decoration: none;
 }
 
 #sorting th.sortby {
@@ -241,13 +359,13 @@ span {
   gap: 1rem;
   background-color: azure;
   position: fixed;
-  top: 30%;
+  top: 5%;
   left: 0;
   right: 0;
   margin: auto;
   padding: 4rem 3rem;
   border: 1px solid black;
-  width: 500px;
+  width: 75%;
 }
 
 /*YOU'VE BEEN HACKED*/

@@ -8,7 +8,7 @@ const bloodURL = "https://petlatkea.dk/2021/hogwarts/families.json";
 
 let halfArr = [];
 let pureArr = [];
-
+let hacked = false;
 let allStudents = [];
 let lastNamearr = [];
 let expelledArr = [];
@@ -73,14 +73,6 @@ function addListeners() {
   document.addEventListener("keyup", inputHack);
 }
 
-// function searchBar() {
-//   document.querySelector("[data-search ]").addEventListener("input", selectSearch);
-// }
-
-// function attemptHack() {
-//   document.addEventListener("keyup", inputHack);
-// }
-
 function findDuplicates() {
   lastNamearr = allStudents.map((a) => a.lastName);
   duplicateLastNames = lastNamearr.filter((lastName, i, aar) => aar.indexOf(lastName) === i && aar.lastIndexOf(lastName) !== i);
@@ -95,14 +87,6 @@ async function loadJSON() {
   jsonData = data;
 }
 
-// function loadJSON() {
-//   fetch(url)
-//     .then((response) => response.json())
-//     .then((jsonData) => {
-//       prepareObjects(jsonData);
-//     });
-// }
-
 async function loadBloodJSON() {
   const resp = await fetch(bloodURL);
   const data = await resp.json();
@@ -113,6 +97,7 @@ async function prepareObjects() {
   allStudents = jsonData.map(prepareStudent);
   allStudents.forEach(populateImg);
   allStudents.forEach(findBlood);
+
   halfArr = bloodJSON.half;
   pureArr = bloodJSON.pure;
 
@@ -122,12 +107,13 @@ async function prepareObjects() {
 function findBlood(student) {
   halfArr = bloodJSON.half;
   pureArr = bloodJSON.pure;
+
   if (pureArr.includes(student.lastName) && halfArr.includes(student.lastName)) {
     student.bloodStatus = "Half Blood";
   } else if (pureArr.includes(student.lastName)) {
     student.bloodStatus = "Pure Blood";
   } else {
-    student.bloodStatus = "Half Blood";
+    student.bloodStatus = "Muggle born";
   }
 }
 
@@ -376,24 +362,36 @@ function displayAll(student) {
   }
 
   function expellStudent() {
-    student.expelled = true;
-    expelledArr.push(student);
-    console.log("expelled array", expelledArr);
-    const index = allStudents.findIndex((element) => {
-      if (element.firstName === student.firstName) {
-        return true;
-      }
-      return false;
-    });
-    console.log("index", index);
+    if (student.hacker === false) {
+      student.expelled = true;
+      expelledArr.push(student);
+      console.log("expelled array", expelledArr);
+      const index = allStudents.findIndex((element) => {
+        if (element.firstName === student.firstName) {
+          return true;
+        }
+        return false;
+      });
+      console.log("index", index);
 
-    const splicedArray = allStudents.splice(index, 1);
-    console.log("splicedarray", splicedArray);
-    const expelledStudent = splicedArray[0];
-    console.log("expelled student", expelledStudent);
+      const splicedArray = allStudents.splice(index, 1);
+      console.log("splicedarray", splicedArray);
+      const expelledStudent = splicedArray[0];
+      console.log("expelled student", expelledStudent);
 
-    popUp.classList.remove("show");
-    buildList();
+      popUp.classList.remove("show");
+      buildList();
+    } else {
+      document.querySelector("#cannotExpell").classList.add("show");
+      document.querySelector("#cannotExpell button.close-button").addEventListener("click", closeWarning);
+    }
+
+    function closeWarning() {
+      document.querySelector("#cannotExpell").classList.remove("show");
+      document.querySelector("#cannotExpell button.close-button").removeEventListener("click", closeWarning);
+      document.querySelector("#cannotExpell [data-action=remove1]").removeEventListener("click", clickRemoveA);
+      document.querySelector("#cannotExpell [data-action=remove2]").removeEventListener("click", clickRemoveB);
+    }
   }
 
   //appoint inquisitors//
@@ -412,6 +410,15 @@ function displayAll(student) {
       document.querySelector("#added").classList.add("show");
       document.querySelector("#added button.close-button").addEventListener("click", closeWarning);
       buildList();
+      if (hacked === true) {
+        setTimeout(() => {
+          student.inSquad = false;
+          document.querySelector("#squadHacked").classList.add("show");
+          document.querySelector("#squadHacked span.squad-member").innerHTML = `${student.firstName} ${student.lastName}`;
+          document.querySelector("#squadHacked button.close-button").addEventListener("click", closeWarning);
+          buildList();
+        }, 3000);
+      }
     }
 
     if (student.house === "Slytherin") {
@@ -419,12 +426,23 @@ function displayAll(student) {
       document.querySelector("#added").classList.add("show");
       document.querySelector("#added button.close-button").addEventListener("click", closeWarning);
       buildList();
+      if (hacked === true) {
+        setTimeout(() => {
+          student.inSquad = false;
+          document.querySelector("#squadHacked").classList.add("show");
+          document.querySelector("#squadHacked span.squad-member").innerHTML = `${student.firstName} ${student.lastName}`;
+          document.querySelector("#squadHacked button.close-button").addEventListener("click", closeWarning);
+          buildList();
+        }, 3000);
+      }
     } else {
       document.querySelector("#notPure").classList.add("show");
       document.querySelector("#notPure button.close-button").addEventListener("click", closeWarning);
     }
 
     function closeWarning() {
+      document.querySelector("#squadHacked").classList.remove("show");
+      document.querySelector("#squadHacked button.close-button").removeEventListener("click", closeWarning);
       document.querySelector("#notPure").classList.remove("show");
       document.querySelector("#notPure button.close-button").removeEventListener("click", closeWarning);
       document.querySelector("#added").classList.remove("show");
@@ -533,9 +551,9 @@ function findArrays() {
 function inputHack(event) {
   let x = event.key;
 
-  if (x === "h") {
+  if (x === "H") {
     isHPressed = true;
-    console.log(`is h  pressed ?`, isHPressed);
+    console.log(`is H  pressed ?`, isHPressed);
   }
   if (x === "a") {
     isAPressed = true;
@@ -556,16 +574,38 @@ function inputHack(event) {
 
 function hack() {
   if (isHPressed === true && isAPressed === true && isCPressed === true && isKPressed === true) {
-    hacked();
+    document.removeEventListener("keyup", inputHack);
+    console.log("system is hacked");
+    allStudents.forEach(hackedBlood);
+    allStudents.push(hacker);
+    //allStudents.forEach(test);
+    document.querySelector("body").classList.add("hacked");
+    buildList();
   } else {
     console.log("not hacked");
   }
 }
 
-function hacked() {
-  document.removeEventListener("keyup", inputHack);
-  console.log("system is hacked");
-  allStudents.push(hacker);
-  document.querySelector("body").classList.add("hacked");
-  buildList();
+function hackedBlood(student) {
+  hacked = true;
+  if (student.bloodStatus === "Muggle born" || student.bloodStatus === "Half Blood") {
+    student.bloodStatus = "Pure Blood";
+  }
+  if (student.bloodStatus === "Pure Blood") {
+    function getRandomBlood(max) {
+      return Math.floor(Math.random() * max);
+    }
+    let x = getRandomBlood(3);
+    console.log(x);
+    if (x === 1) {
+      student.bloodStatus = "Pure Blood";
+    }
+    if (x === 2) {
+      student.bloodStatus = "Half Blood";
+    }
+
+    if (x === 3) {
+      student.bloodStatus = "Muggle Born";
+    }
+  }
 }
