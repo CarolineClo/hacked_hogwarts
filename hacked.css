@@ -328,6 +328,23 @@ span {
   display: inline;
 }
 
+#hackedWarning h2 {
+  margin: 1rem;
+  font-size: 2rem;
+  animation: slide 5s infinite;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@keyframes slide {
+  from {
+    width: 0;
+  }
+  to {
+    width: 700px;
+  }
+}
+
 .student-pop .expell-button {
   grid-column: span 2;
   font-family: var(--font-header);
@@ -448,6 +465,28 @@ span {
 
 /*YOU'VE BEEN HACKED*/
 
-body.hacked {
-  background-color: deeppink;
+#hackedWarning {
+  display: none;
+}
+
+#hackedWarning.show {
+  display: block;
+  background-color: #0f314b;
+}
+
+#hackedWarning h2 {
+  color: rgb(239, 59, 15, 70%);
+  font-size: 2rem;
+  animation: slide 5s infinite;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@keyframes slide {
+  from {
+    width: 0;
+  }
+  to {
+    width: 700px;
+  }
 }

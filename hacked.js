@@ -414,7 +414,7 @@ function hack() {
     allStudents.forEach(hackedBlood);
     allStudents.push(hacker);
     //allStudents.forEach(test);
-    document.querySelector("body").classList.add("hacked");
+    document.querySelector("#hackedWarning").classList.add("show");
     buildList();
   } else {
     console.log("not hacked");
@@ -483,7 +483,6 @@ function displayAll(student) {
   if (student.expelled === true) {
     expelledWarning.classList.add("show");
     expellbutton.classList.add("hide");
-
     copy.querySelector("tr.student-list").classList.add("expelled-student");
   }
 
@@ -528,13 +527,9 @@ function displayAll(student) {
         }
         return false;
       });
-      console.log("index", index);
 
       const splicedArray = allStudents.splice(index, 1);
-      //console.log("splicedarray", splicedArray);
       const expelledStudent = splicedArray[0];
-      //console.log("expelled student", expelledStudent);
-
       popUp.classList.remove("show");
       buildList();
     } else {
