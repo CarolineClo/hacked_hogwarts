@@ -64,6 +64,12 @@ h4 {
   color: var(--dark-text-colour);
 }
 
+h5 {
+  font-family: var(--font-header);
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
 li {
   font-family: var(--font-subhead);
   font-weight: 400;
@@ -263,19 +269,55 @@ span {
 }
 
 .student-pop .message {
-  display: flex;
+  display: grid;
+  grid-template-columns: 40% 1fr;
   flex-direction: column;
   gap: 0.5rem;
-  background-color: azure;
+  /* background-color: azure; */
   position: fixed;
   top: 10%;
-
   left: 0;
   right: 0;
   margin: auto;
-
+  padding: 1rem;
   border: 1px solid black;
-  width: 300px;
+  max-width: 500px;
+}
+
+.student-pop .message.ravenclaw {
+  background-color: rgb(220, 228, 237, 100%);
+}
+
+.student-pop .message.gryffindor {
+  background-color: rgb(255, 253, 193, 100%);
+}
+
+.student-pop .message.slytherin {
+  background-color: rgb(197, 237, 191, 100%);
+}
+
+.student-pop .message.hufflepuff {
+  background-color: rgb(252, 194, 115, 100%);
+}
+
+.student-pop img {
+  width: 75%;
+  justify-self: center;
+}
+
+.house-heading {
+  display: flex;
+  padding: 1rem;
+  gap: 1rem;
+  grid-column: span 2;
+}
+
+.house-heading img {
+  width: 10%;
+}
+
+.house-heading h5 {
+  align-self: center;
 }
 
 .student-pop .expelled-warning {
@@ -287,11 +329,20 @@ span {
 }
 
 .student-pop .expell-button {
-  margin: 0 1rem 0.5rem;
-  padding: 1rem;
+  grid-column: span 2;
+  font-family: var(--font-header);
+  text-transform: uppercase;
+  padding: 1rem 0;
+  margin: 0 1rem;
+  font-size: 2rem;
 }
 
 .student-pop .inquisitor-button {
+  height: 64%;
+  justify-self: center;
+  align-self: center;
+  font-family: var(--font-header);
+  text-transform: uppercase;
   margin: 0 1rem;
 }
 

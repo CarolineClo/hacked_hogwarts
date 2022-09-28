@@ -1,3 +1,5 @@
+////MODEL////
+
 "use strict";
 
 window.addEventListener("DOMContentLoaded", start);
@@ -62,8 +64,6 @@ async function start() {
   prepareObjects();
 }
 
-////MODEL////
-
 //add event listeners//
 
 function addListeners() {
@@ -71,12 +71,6 @@ function addListeners() {
   document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
   document.querySelector("[data-search ]").addEventListener("input", selectSearch);
   document.addEventListener("keyup", inputHack);
-}
-
-function findDuplicates() {
-  lastNamearr = allStudents.map((a) => a.lastName);
-  duplicateLastNames = lastNamearr.filter((lastName, i, aar) => aar.indexOf(lastName) === i && aar.lastIndexOf(lastName) !== i);
-  return duplicateLastNames;
 }
 
 //fetching and preparing the data
@@ -93,6 +87,8 @@ async function loadBloodJSON() {
   bloodJSON = data;
 }
 
+////CONTROLLER///
+
 async function prepareObjects() {
   allStudents = jsonData.map(prepareStudent);
   allStudents.forEach(populateImg);
@@ -102,6 +98,14 @@ async function prepareObjects() {
   pureArr = bloodJSON.pure;
 
   buildList();
+}
+
+function buildList() {
+  const currentList = filterList(allStudents);
+  const sortedList = sortList(currentList);
+  const searchedList = searchList(sortedList);
+  populateStudentPop(searchedList);
+  allStudents.forEach(findArrays);
 }
 
 function findBlood(student) {
@@ -115,6 +119,17 @@ function findBlood(student) {
   } else {
     student.bloodStatus = "Muggle born";
   }
+}
+
+function populateStudentPop(allStudents) {
+  document.querySelector("#hogwartsData").innerHTML = "";
+  allStudents.forEach(displayAll);
+}
+
+function findDuplicates() {
+  lastNamearr = allStudents.map((a) => a.lastName);
+  duplicateLastNames = lastNamearr.filter((lastName, i, aar) => aar.indexOf(lastName) === i && aar.lastIndexOf(lastName) !== i);
+  return duplicateLastNames;
 }
 
 function populateImg(student) {
@@ -165,8 +180,6 @@ function prepareStudent(studentInfo) {
 function capitalise(str) {
   return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
 }
-
-////controller///
 
 //searchbar
 //find search term
@@ -253,7 +266,6 @@ function isSearched(student) {
 function selectSort(event) {
   const sortBy = event.target.dataset.sort;
   const sortDir = event.target.dataset.sortDirection;
-
   //find old sortBy element and remove sortby
   const oldElement = document.querySelector(`[data-sort='${settings.sortBy}']`);
   oldElement.classList.remove("sortby");
@@ -295,183 +307,6 @@ function sortList(sortedList) {
   }
 
   return sortedList;
-}
-
-//create the filtered/sorted list
-
-function buildList() {
-  const currentList = filterList(allStudents);
-  const sortedList = sortList(currentList);
-  const searchedList = searchList(sortedList);
-  populateStudentPop(searchedList);
-  allStudents.forEach(findArrays);
-}
-
-// view
-//displaying the data
-
-function populateStudentPop(allStudents) {
-  document.querySelector("#hogwartsData").innerHTML = "";
-  allStudents.forEach(displayAll);
-}
-
-function displayAll(student) {
-  const template = document.querySelector("#studentPop").content;
-  const copy = template.cloneNode(true);
-  const popUp = copy.querySelector(".student-pop");
-  const expelledWarning = copy.querySelector(".expelled-warning");
-  const expellbutton = copy.querySelector(".expell-button");
-  const inquisitorButton = copy.querySelector(".inquisitor-button");
-
-  //the list of names
-
-  copy.querySelector("[data-field = first-name]").textContent = student.firstName;
-  copy.querySelector("[data-field = last-name]").textContent = student.lastName;
-  copy.querySelector("[data-field = house]").textContent = student.house;
-  copy.querySelector("[data-field = first-name]").addEventListener("click", clickShowPop);
-  copy.querySelector("[data-field = last-name]").addEventListener("click", clickShowPop);
-  copy.querySelector("[data-field = house]").addEventListener("click", clickShowPop);
-
-  //the pop up
-  copy.querySelector(".first-name").textContent = student.firstName;
-  copy.querySelector(".last-name").textContent = student.lastName;
-  copy.querySelector(".middle-name").textContent = student.middleName;
-  copy.querySelector(".nick-name").textContent = student.nickName;
-  copy.querySelector(".house").textContent = student.house;
-  copy.querySelector(".prefect").textContent = student.prefect;
-  copy.querySelector(".blood-status").textContent = student.bloodStatus;
-  copy.querySelector(".expelled").textContent = student.expelled;
-  copy.querySelector(".squad").textContent = student.inSquad;
-  copy.querySelector(".portrait").src = `images/${student.imageName}`;
-  copy.querySelector(".close").addEventListener("click", clickShowPop);
-  if (student.expelled === true) {
-    expelledWarning.classList.add("show");
-    expellbutton.classList.add("hide");
-    inquisitorButton.classList.add("hide");
-    copy.querySelector("tr.student-list").classList.add("expelled-student");
-  }
-
-  function clickShowPop() {
-    if (popUp.classList.contains("show")) {
-      popUp.classList.remove("show");
-    } else {
-      expellbutton.addEventListener("click", expellStudent);
-      inquisitorButton.addEventListener("click", selectInquisitor);
-      popUp.classList.add("show");
-    }
-  }
-
-  function expellStudent() {
-    if (student.hacker === false) {
-      student.expelled = true;
-      expelledArr.push(student);
-      console.log("expelled array", expelledArr);
-      const index = allStudents.findIndex((element) => {
-        if (element.firstName === student.firstName) {
-          return true;
-        }
-        return false;
-      });
-      console.log("index", index);
-
-      const splicedArray = allStudents.splice(index, 1);
-      console.log("splicedarray", splicedArray);
-      const expelledStudent = splicedArray[0];
-      console.log("expelled student", expelledStudent);
-
-      popUp.classList.remove("show");
-      buildList();
-    } else {
-      document.querySelector("#cannotExpell").classList.add("show");
-      document.querySelector("#cannotExpell button.close-button").addEventListener("click", closeWarning);
-    }
-
-    function closeWarning() {
-      document.querySelector("#cannotExpell").classList.remove("show");
-      document.querySelector("#cannotExpell button.close-button").removeEventListener("click", closeWarning);
-      document.querySelector("#cannotExpell [data-action=remove1]").removeEventListener("click", clickRemoveA);
-      document.querySelector("#cannotExpell [data-action=remove2]").removeEventListener("click", clickRemoveB);
-    }
-  }
-
-  //appoint inquisitors//
-
-  function selectInquisitor() {
-    if (student.inSquad === true) {
-      student.inSquad = false;
-    } else {
-      attemptInquisitor(student);
-    }
-  }
-
-  function attemptInquisitor() {
-    if (student.bloodStatus === "Pure Blood") {
-      student.inSquad = true;
-      document.querySelector("#added").classList.add("show");
-      document.querySelector("#added button.close-button").addEventListener("click", closeWarning);
-      buildList();
-      if (hacked === true) {
-        setTimeout(() => {
-          student.inSquad = false;
-          document.querySelector("#squadHacked").classList.add("show");
-          document.querySelector("#squadHacked span.squad-member").innerHTML = `${student.firstName} ${student.lastName}`;
-          document.querySelector("#squadHacked button.close-button").addEventListener("click", closeWarning);
-          buildList();
-        }, 3000);
-      }
-    }
-
-    if (student.house === "Slytherin") {
-      student.inSquad = true;
-      document.querySelector("#added").classList.add("show");
-      document.querySelector("#added button.close-button").addEventListener("click", closeWarning);
-      buildList();
-      if (hacked === true) {
-        setTimeout(() => {
-          student.inSquad = false;
-          document.querySelector("#squadHacked").classList.add("show");
-          document.querySelector("#squadHacked span.squad-member").innerHTML = `${student.firstName} ${student.lastName}`;
-          document.querySelector("#squadHacked button.close-button").addEventListener("click", closeWarning);
-          buildList();
-        }, 3000);
-      }
-    } else {
-      document.querySelector("#notPure").classList.add("show");
-      document.querySelector("#notPure button.close-button").addEventListener("click", closeWarning);
-    }
-
-    function closeWarning() {
-      document.querySelector("#squadHacked").classList.remove("show");
-      document.querySelector("#squadHacked button.close-button").removeEventListener("click", closeWarning);
-      document.querySelector("#notPure").classList.remove("show");
-      document.querySelector("#notPure button.close-button").removeEventListener("click", closeWarning);
-      document.querySelector("#added").classList.remove("show");
-      document.querySelector("#added button.close-button").removeEventListener("click", closeWarning);
-    }
-  }
-
-  //appoint prefect
-
-  if (student.prefect === true) {
-    copy.querySelector("[data-field = prefect]").textContent = "👑";
-  } else {
-    copy.querySelector("[data-field = prefect]").textContent = "⸬";
-  }
-
-  copy.querySelector("[data-field = prefect]").dataset.prefect = student.prefect;
-  copy.querySelector("[data-field = prefect]").addEventListener("click", selectPrefect);
-
-  function selectPrefect() {
-    if (student.prefect === true) {
-      student.prefect = false;
-    } else {
-      attemptPrefect(student);
-    }
-    buildList();
-  }
-
-  const parent = document.querySelector("#hogwartsData");
-  parent.appendChild(copy);
 }
 
 function attemptPrefect(selectedStudent) {
@@ -596,7 +431,7 @@ function hackedBlood(student) {
       return Math.floor(Math.random() * max);
     }
     let x = getRandomBlood(3);
-    console.log(x);
+
     if (x === 1) {
       student.bloodStatus = "Pure Blood";
     }
@@ -608,4 +443,189 @@ function hackedBlood(student) {
       student.bloodStatus = "Muggle Born";
     }
   }
+}
+
+// VIEW//
+
+//displaying the data
+
+function displayAll(student) {
+  const template = document.querySelector("#studentPop").content;
+  const copy = template.cloneNode(true);
+  const popUp = copy.querySelector(".student-pop");
+  const expelledWarning = copy.querySelector(".expelled-warning");
+  const expellbutton = copy.querySelector(".expell-button");
+  const inquisitorButton = copy.querySelector(".inquisitor-button");
+  const popMessage = copy.querySelector(".student-pop .message ");
+  const crest = copy.querySelector(".student-pop .house-heading img");
+
+  //the list of names
+
+  copy.querySelector("[data-field = first-name]").textContent = student.firstName;
+  copy.querySelector("[data-field = last-name]").textContent = student.lastName;
+  copy.querySelector("[data-field = house]").textContent = student.house;
+  copy.querySelector("[data-field = first-name]").addEventListener("click", clickShowPop);
+  copy.querySelector("[data-field = last-name]").addEventListener("click", clickShowPop);
+  copy.querySelector("[data-field = house]").addEventListener("click", clickShowPop);
+
+  //the pop up
+  copy.querySelector(".first-name").textContent = student.firstName;
+  copy.querySelector(".last-name").textContent = student.lastName;
+  copy.querySelector(".middle-name").textContent = student.middleName;
+  copy.querySelector(".nick-name").textContent = student.nickName;
+  copy.querySelector(".house").textContent = student.house;
+  copy.querySelector(".prefect").textContent = student.prefect;
+  copy.querySelector(".blood-status").textContent = student.bloodStatus;
+
+  copy.querySelector(".squad").textContent = student.inSquad;
+  copy.querySelector(".portrait").src = `images/${student.imageName}`;
+  copy.querySelector(".close").addEventListener("click", clickShowPop);
+  if (student.expelled === true) {
+    expelledWarning.classList.add("show");
+    expellbutton.classList.add("hide");
+
+    copy.querySelector("tr.student-list").classList.add("expelled-student");
+  }
+
+  if (student.house === "Ravenclaw") {
+    popMessage.classList.add("ravenclaw");
+    crest.src = "images/rave_1@.png";
+  }
+
+  if (student.house === "Gryffindor") {
+    popMessage.classList.add("gryffindor");
+    crest.src = "images/gryf@.png";
+  }
+
+  if (student.house === "Slytherin") {
+    popMessage.classList.add("slytherin");
+    crest.src = "images/slyth_2@.png";
+  }
+
+  if (student.house === "Hufflepuff") {
+    popMessage.classList.add("hufflepuff");
+    crest.src = "images/huff_1@.png";
+  }
+
+  function clickShowPop() {
+    if (popUp.classList.contains("show")) {
+      popUp.classList.remove("show");
+    } else {
+      expellbutton.addEventListener("click", expellStudent);
+      inquisitorButton.addEventListener("click", selectInquisitor);
+      popUp.classList.add("show");
+    }
+  }
+
+  function expellStudent() {
+    if (student.hacker === false) {
+      student.expelled = true;
+      expelledArr.push(student);
+
+      const index = allStudents.findIndex((element) => {
+        if (element.firstName === student.firstName) {
+          return true;
+        }
+        return false;
+      });
+      console.log("index", index);
+
+      const splicedArray = allStudents.splice(index, 1);
+      //console.log("splicedarray", splicedArray);
+      const expelledStudent = splicedArray[0];
+      //console.log("expelled student", expelledStudent);
+
+      popUp.classList.remove("show");
+      buildList();
+    } else {
+      document.querySelector("#cannotExpell").classList.add("show");
+      document.querySelector("#cannotExpell button.close-button").addEventListener("click", closeWarning);
+    }
+
+    function closeWarning() {
+      document.querySelector("#cannotExpell").classList.remove("show");
+      document.querySelector("#cannotExpell button.close-button").removeEventListener("click", closeWarning);
+      // document.querySelector("#cannotExpell [data-action=remove1]").removeEventListener("click", clickRemoveA);
+      // document.querySelector("#cannotExpell [data-action=remove2]").removeEventListener("click", clickRemoveB);
+    }
+  }
+
+  //appoint inquisitors//
+
+  function selectInquisitor() {
+    if (student.inSquad === true) {
+      student.inSquad = false;
+    } else {
+      attemptInquisitor(student);
+    }
+  }
+
+  function attemptInquisitor() {
+    if (student.bloodStatus === "Pure Blood") {
+      student.inSquad = true;
+      document.querySelector("#added").classList.add("show");
+      document.querySelector("#added button.close-button").addEventListener("click", closeWarning);
+      buildList();
+      if (hacked === true) {
+        setTimeout(() => {
+          student.inSquad = false;
+          document.querySelector("#squadHacked").classList.add("show");
+          document.querySelector("#squadHacked span.squad-member").innerHTML = `${student.firstName} ${student.lastName}`;
+          document.querySelector("#squadHacked button.close-button").addEventListener("click", closeWarning);
+          buildList();
+        }, 3000);
+      }
+    }
+
+    if (student.house === "Slytherin") {
+      student.inSquad = true;
+      document.querySelector("#added").classList.add("show");
+      document.querySelector("#added button.close-button").addEventListener("click", closeWarning);
+      buildList();
+      if (hacked === true) {
+        setTimeout(() => {
+          student.inSquad = false;
+          document.querySelector("#squadHacked").classList.add("show");
+          document.querySelector("#squadHacked span.squad-member").innerHTML = `${student.firstName} ${student.lastName}`;
+          document.querySelector("#squadHacked button.close-button").addEventListener("click", closeWarning);
+          buildList();
+        }, 3000);
+      }
+    } else {
+      document.querySelector("#notPure").classList.add("show");
+      document.querySelector("#notPure button.close-button").addEventListener("click", closeWarning);
+    }
+
+    function closeWarning() {
+      document.querySelector("#squadHacked").classList.remove("show");
+      document.querySelector("#squadHacked button.close-button").removeEventListener("click", closeWarning);
+      document.querySelector("#notPure").classList.remove("show");
+      document.querySelector("#notPure button.close-button").removeEventListener("click", closeWarning);
+      document.querySelector("#added").classList.remove("show");
+      document.querySelector("#added button.close-button").removeEventListener("click", closeWarning);
+    }
+  }
+
+  //appoint prefect
+
+  if (student.prefect === true) {
+    copy.querySelector("[data-field = prefect]").textContent = "👑";
+  } else {
+    copy.querySelector("[data-field = prefect]").textContent = "⸬";
+  }
+
+  copy.querySelector("[data-field = prefect]").dataset.prefect = student.prefect;
+  copy.querySelector("[data-field = prefect]").addEventListener("click", selectPrefect);
+
+  function selectPrefect() {
+    if (student.prefect === true) {
+      student.prefect = false;
+    } else {
+      attemptPrefect(student);
+    }
+    buildList();
+  }
+
+  const parent = document.querySelector("#hogwartsData");
+  parent.appendChild(copy);
 }
